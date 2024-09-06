@@ -39,15 +39,19 @@ unsigned long generate_random_index(unsigned long *seed, int array_size) {
 }
 
 int main(int argc, char *argv[]) {
-  if (argc > 1 && !strcmp(argv[1], "-v")) {
+  if ((argc > 1 && !strcmp(argv[1], "-v")) || !strcmp(argv[1], "--version")) {
     printf("hell v%s\nLicensed under BSD-Clause-3\n", VERSION);
+    exit(0);
+  }
+  if ((argc > 1 && !strcmp(argv[1], "-h")) || !strcmp(argv[1], "--help")) {
+    puts(HELP_BANNER);
     exit(0);
   }
   puts(BANNER);
   puts("leave while you still can...\n");
   sleep(1);
   while (true) {
-    if (argc > 1 && !strcmp(argv[1], "-f")) {
+    if ((argc > 1 && !strcmp(argv[1], "-f")) || !strcmp(argv[1], "--fork")) {
       pid_t proc = fork();
       printf("created new process %d\n", proc);
     }

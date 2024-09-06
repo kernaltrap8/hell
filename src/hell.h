@@ -11,7 +11,7 @@
    required defines
 */
 
-#define VERSION "0.1"
+#define VERSION "0.2"
 #define MODULUS 2147483648 // 2^31
 #define MULTIPLIER 1103515245
 #define INCREMENT 12345
@@ -23,6 +23,14 @@
 | |/ |/ / _// /__/ /__/ /_/ / /|_/ / _/    / / / /_/ / / _  / _// /__/ /__\n\
 |__/|__/___/____/\\___/\\____/_/  /_/___/   /_/  \\____/ /_//_/___/____/____/\n\
                                                                           \n"
+#define HELP_BANNER                                                            \
+  "Usage: hell [flags]\n \
+    -h | --help\n \
+        Display this help banner\n \
+    -v | --version\n \
+        Display program version\n \
+    -f | --fork\n \
+       Call 'fork()' alongside 'malloc()'"
 /*
    function prototypes
 */
