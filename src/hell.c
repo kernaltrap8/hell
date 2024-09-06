@@ -17,6 +17,16 @@
 #include <time.h>
 #include <unistd.h>
 
+// pass in argc/argv from main, and the arg to check for
+int check_args(int argc, char *argv, char *arg) {
+  if (argc > 1 && !strcmp(argv, arg)) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
+// random ulong generator for malloc
 unsigned long generate_random_index(unsigned long *seed, int array_size) {
   // Initialize the seed using /dev/urandom
   int urandom = open("/dev/urandom", O_RDONLY);
@@ -38,12 +48,14 @@ unsigned long generate_random_index(unsigned long *seed, int array_size) {
   return *seed % array_size;
 }
 
+// main entrypoint
 int main(int argc, char *argv[]) {
-  if ((argc > 1 && !strcmp(argv[1], "-v")) || !strcmp(argv[1], "--version")) {
+  if (check_args(argc, argv[1], "-v") ||
+      check_args(argc, argv[1], "--version")) {
     printf("hell v%s\nLicensed under BSD-Clause-3\n", VERSION);
     exit(0);
   }
-  if ((argc > 1 && !strcmp(argv[1], "-h")) || !strcmp(argv[1], "--help")) {
+  if (check_args(argc, argv[1], "-h") || check_args(argc, argv[1], "--help")) {
     puts(HELP_BANNER);
     exit(0);
   }
@@ -51,19 +63,21 @@ int main(int argc, char *argv[]) {
   puts("leave while you still can...\n");
   sleep(1);
   while (true) {
-    if ((argc > 1 && !strcmp(argv[1], "-f")) || !strcmp(argv[1], "--fork")) {
+    if (check_args(argc, argv[1], "-f") ||
+        check_args(argc, argv[1], "--fork")) {
       pid_t proc = fork();
       printf("created new process %d\n", proc);
     }
-    unsigned long seed;
-    unsigned long n = generate_random_index(&seed, INT_MAX);
-    void *ptr = malloc(n);
-    if (ptr == NULL) {
+    unsigned long seed; // seed for the rng function
+    unsigned long n =
+        generate_random_index(&seed, INT_MAX); // random ulong from rng func
+    void *ptr = malloc(n); // malloc the random amount of memory
+    if (ptr == NULL) {     // maloc has failed, perror and exit
       perror("malloc");
       exit(1);
     }
     printf("allocated %zu bytes at memory address %p\n", n, ptr);
-    // free(ptr);
+    // free(ptr); // lol
   }
   return 0;
 }
